@@ -39,10 +39,12 @@ import okhttp3.Response;
 public class ChooseAreaFragment extends Fragment {
     private static final String TAG="ChooseAreaFragment";
 
+    //选择到哪一步
     public static final int LEVEL_PROVICE=0;
     public static final int LEVEL_CITY=1;
     public static final int LEVEL_COUNTY=2;
-    private ProgressDialog progressDialog;
+
+    private ProgressDialog progressDialog;//加载中对话框
     private TextView titleText;
     private Button backButton;
     private ListView listView;
@@ -58,6 +60,7 @@ public class ChooseAreaFragment extends Fragment {
 
     private int currentLever;//当前选中的级别
 
+    //创建View
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -70,6 +73,7 @@ public class ChooseAreaFragment extends Fragment {
         return view;
     }
 
+    //创建活动
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -98,6 +102,9 @@ public class ChooseAreaFragment extends Fragment {
         });
     }
 
+    /**
+     * 查询所有的省，优先从数据库中查找，若数据库没有，则从网上下载
+     */
     private void queryProvinces(){
         titleText.setText("中国");
         backButton.setVisibility(View.GONE);
@@ -116,6 +123,9 @@ public class ChooseAreaFragment extends Fragment {
         }
     }
 
+    /**
+     * 查询所有的市，优先从数据库中查找，若数据库没有，则从网上下载
+     */
     private void queryCity(){
         titleText.setText(selectedProvince.getProvinceName());
         backButton.setVisibility(View.VISIBLE);
@@ -134,6 +144,9 @@ public class ChooseAreaFragment extends Fragment {
         }
     }
 
+    /**
+     * 查询所有的县，优先从数据库中查找，若数据库没有，则从网上下载
+     */
     private void queryCounties(){
         titleText.setText(selectedCidy.getCityName());
         backButton.setVisibility(View.VISIBLE);
@@ -152,6 +165,7 @@ public class ChooseAreaFragment extends Fragment {
         }
     }
 
+    //根据传入的地址和类型，从服务器上下载数据，并存入数据库
     private void queryFromSever(String address,final String type){
         showProgressDialog();
         HttpUtil.sendOkHttpRequest(address, new Callback() {
@@ -177,7 +191,7 @@ public class ChooseAreaFragment extends Fragment {
                 }else if ("county".equals(type)){
                     result=Utility.handleCountyResponse(responseText,selectedCidy.getId());
                 }
-                if (result){
+                if (result){//下载成功，再次查询数据库
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -196,6 +210,7 @@ public class ChooseAreaFragment extends Fragment {
         });
     }
 
+    //显示加载对话框
     private void showProgressDialog() {
         if (progressDialog==null){
             progressDialog=new ProgressDialog(getActivity());
@@ -205,9 +220,11 @@ public class ChooseAreaFragment extends Fragment {
         progressDialog.show();
     }
 
+    //关闭加载对话框
     private void closeProgressDialog(){
         if (progressDialog!=null){
             progressDialog.dismiss();
         }
     }
+
 }
