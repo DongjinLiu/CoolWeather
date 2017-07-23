@@ -66,6 +66,8 @@ public class WeatherActivity extends AppCompatActivity {
 
     private ImageView bingPicImg;
 
+    private String mWeatherId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,22 +104,22 @@ public class WeatherActivity extends AppCompatActivity {
         //读取缓存
         SharedPreferences prefs= PreferenceManager.getDefaultSharedPreferences(this);
         String weatherString =prefs.getString("weather",null);
-        final String weatherId;
+        //final String weatherId;
         if (weatherString!=null){
             Weather weather= Utility.handleWeatherResponse(weatherString);
-            weatherId=weather.basic.weatherId;
+            mWeatherId=weather.basic.weatherId;
             showWeatherInfo(weather);
         }else{//缓存中无信息，通过网络下载信息
-            weatherId=getIntent().getStringExtra("weather_id");
+            mWeatherId=getIntent().getStringExtra("weather_id");
             weatherLayout.setVisibility(View.VISIBLE);
-            requestWeather(weatherId);
+            requestWeather(mWeatherId);
         }
 
         //刷新事件
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
             @Override
             public void onRefresh() {
-                requestWeather(weatherId);
+                requestWeather(mWeatherId);
             }
         });
 
@@ -199,6 +201,7 @@ public class WeatherActivity extends AppCompatActivity {
                                     getDefaultSharedPreferences(WeatherActivity.this).edit();
                             editor.putString("weather",responseText);//写入缓存
                             editor.apply();
+                            mWeatherId=weather.basic.weatherId;
                             //显示
                             showWeatherInfo(weather);
                         }else{

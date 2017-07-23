@@ -9,6 +9,9 @@ import okhttp3.Request;
  * 联网时用
  */
 
+
+
+
 public class HttpUtil {
     public static void sendOkHttpRequest(String address, okhttp3.Callback callback) {
         OkHttpClient client = new OkHttpClient();
