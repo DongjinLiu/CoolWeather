@@ -22,7 +22,12 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+/**
+ * 后台更新服务
+ */
+
 public class AutoUpdateService extends Service {
+
     public AutoUpdateService() {
     }
 
@@ -31,6 +36,13 @@ public class AutoUpdateService extends Service {
         return null;
     }
 
+    /**
+     * 开始服务时执行
+     * @param intent
+     * @param flags
+     * @param startId
+     * @return
+     */
     @Override
     public int onStartCommand(Intent intent,int flags, int startId) {
         updateWeather();
@@ -45,6 +57,9 @@ public class AutoUpdateService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
+    /**
+     * 更新背景图
+     */
     private void updateBingPic() {
         String requestBingPic = "http://guolin.tech/api/bing_pic";
         HttpUtil.sendOkHttpRequest(requestBingPic, new Callback() {
@@ -63,6 +78,9 @@ public class AutoUpdateService extends Service {
         });
     }
 
+    /**
+     * 更新天气信息
+     */
     private void updateWeather() {
         SharedPreferences prefs= PreferenceManager.getDefaultSharedPreferences(this);
         String weatherString =prefs.getString("weather",null);

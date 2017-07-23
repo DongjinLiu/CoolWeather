@@ -15,6 +15,8 @@ import org.json.JSONObject;
 
 /**
  * Created by jin on 2017/7/22.
+ *
+ * 用来解析各类返回的数据String
  */
 
 public class Utility {
@@ -23,8 +25,9 @@ public class Utility {
 
     /**
      * 解析和处理服务器返回的省级数据
-     * @param response
-     * @return
+     * 存入数据库
+     * @param response 省数据
+     * @return 处理结果
      */
     public static boolean handleProvinceResponse(String response){
         //Log.d(TAG, "handleProvinceResponse: OK");
@@ -51,9 +54,10 @@ public class Utility {
 
     /**
      * 解析和处理服务器返回的市级数据
-     * @param response
-     * @param provinceId
-     * @return
+     * 存入数据库
+     * @param response 服务器返回的市数据
+     * @param provinceId 选中的省
+     * @return 处理结果
      */
     public static boolean handleCityResponse(String response,int provinceId){
         if (!TextUtils.isEmpty(response)){
@@ -77,9 +81,10 @@ public class Utility {
 
     /**
      * 解析和处理服务器返回的县级数据
-     * @param response
-     * @param cityId
-     * @return
+     * 存入数据库
+     * @param response 服务器返回的JSON数据
+     * @param cityId 选中的市
+     * @return 解析结果
      */
     public static boolean handleCountyResponse(String response,int cityId){
         if (!TextUtils.isEmpty(response)){
@@ -103,8 +108,8 @@ public class Utility {
 
     /**
      * 将返回的JSON数据解析成Weather实体类
-     * @param response
-     * @return
+     * @param response 服务器返回的JSON数据
+     * @return 解析出来的Weather类
      */
     public static Weather handleWeatherResponse(String response){
         try {

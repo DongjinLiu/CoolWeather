@@ -89,14 +89,14 @@ public class ChooseAreaFragment extends Fragment {
                     queryCounties();
                 }else if (currentLever==LEVEL_COUNTY){
                     String weatherId=countyList.get(position).getWeatherId();
-                    if (getActivity() instanceof MainActivity){
+                    if (getActivity() instanceof MainActivity){//在MinaActivity中
                         Intent intent=new Intent(getActivity(),WeatherActivity.class);
                         intent.putExtra("weather_id",weatherId);
                         startActivity(intent);
                         getActivity().finish();
-                    }else if (getActivity() instanceof WeatherActivity){
+                    }else if (getActivity() instanceof WeatherActivity){//在WeatherActivity中
                         WeatherActivity activity=(WeatherActivity)getActivity();
-                        activity.drawerLayout.closeDrawers();
+                        activity.drawerLayout.closeDrawers();//关闭DrawerLayout
                         activity.swipeRefresh.setRefreshing(true);
                         activity.requestWeather(weatherId);
                     }
@@ -140,9 +140,11 @@ public class ChooseAreaFragment extends Fragment {
      * 查询所有的市，优先从数据库中查找，若数据库没有，则从网上下载
      */
     private void queryCity(){
+        //根据选中的省查询市列表
         titleText.setText(selectedProvince.getProvinceName());
         backButton.setVisibility(View.VISIBLE);
         cityList=DataSupport.where("provinceid=?",String.valueOf(selectedProvince.getId())).find(City.class);
+
         if (cityList.size()>0){
             dataList.clear();
             for (City city:cityList){
@@ -178,7 +180,11 @@ public class ChooseAreaFragment extends Fragment {
         }
     }
 
-    //根据传入的地址和类型，从服务器上下载数据，并存入数据库
+    /**
+     * 根据传入的地址和类型，从服务器上下载数据，并存入数据库
+     * @param address 数据地址
+     * @param type 数据类型
+     */
     private void queryFromSever(String address,final String type){
         showProgressDialog();
         HttpUtil.sendOkHttpRequest(address, new Callback() {
