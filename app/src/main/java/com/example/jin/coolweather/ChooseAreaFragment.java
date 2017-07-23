@@ -84,9 +84,15 @@ public class ChooseAreaFragment extends Fragment {
                 if (currentLever==LEVEL_PROVICE){
                     selectedProvince=provinceList.get(position);
                     queryCity();
-                }else if (currentLever==LEVEL_CITY){
-                    selectedCidy=cityList.get(position);
+                }else if (currentLever==LEVEL_CITY) {
+                    selectedCidy = cityList.get(position);
                     queryCounties();
+                }else if (currentLever==LEVEL_COUNTY){
+                    String weatherId=countyList.get(position).getWeatherId();
+                    Intent intent=new Intent(getActivity(),WeatherActivity.class);
+                    intent.putExtra("weather_id",weatherId);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
             }
         });
