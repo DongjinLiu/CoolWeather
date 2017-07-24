@@ -68,6 +68,8 @@ public class WeatherActivity extends AppCompatActivity {
 
     private String mWeatherId;
 
+    private String bingPic;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,11 +122,12 @@ public class WeatherActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 requestWeather(mWeatherId);
+                loadBingPic();
             }
         });
 
         //显示背景图
-        String bingPic=prefs.getString("bing_pic",null);//读取缓存文件
+        bingPic=prefs.getString("bing_pic",null);//读取缓存文件
         if (bingPic!=null){
             Glide.with(this).load(bingPic).into(bingPicImg);
         }else{
